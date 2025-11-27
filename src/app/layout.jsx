@@ -5,7 +5,7 @@ import Footer from './../components/Footer'
 
 export const metadata = {
 	title: 'Abhishek Roy | Portfolio',
-	description: 'Full Stack Developer Portfolio',
+	description: 'WordPress and Shopify Developer Portfolio',
 }
 
 export default function RootLayout({ children }) {

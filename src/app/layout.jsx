@@ -4,8 +4,17 @@ import Navbar from './../components/Navbar'
 import Footer from './../components/Footer'
 
 export const metadata = {
-	title: 'Abhishek Roy | Portfolio',
-	description: 'WordPress and Shopify Developer Portfolio',
+	title: {
+		default: 'Abhishek Roy',
+		template: '%s | Abhishek Roy',
+	},
+	description:
+		'Backend-focused WordPress, WooCommerce, Shopify, and full-stack developer portfolio.',
+	icons: {
+		icon: '/favicon.ico',
+		shortcut: '/favicon-16x16.png',
+		apple: '/apple-touch-icon.png',
+	},
 }
 
 export default function RootLayout({ children }) {

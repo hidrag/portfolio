@@ -1,91 +1,101 @@
-import projects from '@/data/projects'
+export const dynamic = 'force-dynamic'
+import { fetchProjects } from '@/lib/api'
 import Image from 'next/image'
-import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import BackButton from '@/components/BackButton'
 import LightboxGallery from '@/components/LightboxGallery'
 
-export async function generateStaticParams() {
-	return projects.map((p) => ({ slug: p.slug }))
+function slugify(text) {
+	return text
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/(^-|-$)/g, '')
 }
 
-export default async function ProjectDetails({ params }) {
-	const resolvedParams = await params
-	const project = projects.find((p) => p.slug === resolvedParams.slug)
+export default async function ProjectDetailPage(props) {
+	const { slug } = await props.params // ✅ FIX: await params
+
+	const projects = await fetchProjects()
+
+	const project = projects.find((p) => slugify(p.title) === slug)
 
 	if (!project) {
-		return (
-			<div className='max-w-4xl mx-auto py-20 text-center'>
-				<h1 className='text-3xl font-bold text-red-400'>
-					Project not found
-				</h1>
-			</div>
-		)
+		return notFound()
 	}
 
 	return (
-		<section className='max-w-5xl mx-auto px-4 py-10'>
-			{/* Title + Year */}
+		<section className='max-w-4xl mx-auto px-4 py-10'>
+			<h1 className='text-3xl font-bold text-blue-400 mb-4'>
+				{project.title}
+			</h1>
+
+			<p className='text-gray-400 mb-2'>
+				<strong>Year:</strong> {project.year}
+			</p>
+
+			<p className='text-gray-400 mb-2'>
+				<strong>Role:</strong> {project.role}
+			</p>
+
+			<p className='mb-6'>{project.description}</p>
+
+			{project.image && (
+				<Image
+					src={project.image}
+					alt={project.title}
+					width={800}
+					height={450}
+					className='rounded mb-6'
+				/>
+			)}
+
 			<div className='mb-6'>
-				<h1 className='text-4xl font-bold text-blue-400 mb-1'>
-					{project.title}
-				</h1>
-				<span className='text-gray-400 text-sm'>{project.year}</span>
-			</div>
-
-			{/* Role */}
-			<p className='text-gray-300 mb-6'>
-				<span className='font-semibold text-gray-200'>Role: </span>
-				{project.role}
-			</p>
-
-			{/* Description */}
-			<p className='text-gray-300 leading-relaxed mb-8'>
-				<span className='font-semibold text-gray-200'>
-					Description:{' '}
-				</span>
-				{project.description}
-			</p>
-
-			{/* Tech Stack */}
-			<div className='mb-8'>
-				<h2 className='text-2xl font-semibold text-blue-300 mb-3'>
-					Tech Stack
-				</h2>
-				<div className='flex flex-wrap gap-2'>
-					{project.technologies.map((tech) => (
-						<span
+				<h3 className='font-semibold mb-2'>Tech Stack</h3>
+				<ul className='flex flex-wrap gap-2'>
+					{project.tech.map((tech) => (
+						<li
 							key={tech}
-							className='bg-gray-800 px-3 py-1 text-xs rounded text-gray-200'>
+							className='bg-blue-600/20 text-blue-300 px-3 py-1 rounded text-sm'>
 							{tech}
-						</span>
+						</li>
 					))}
-				</div>
+				</ul>
 			</div>
 
-			{/* Screenshots */}
-			{project.screenshots?.length > 0 && (
-				<div className='mb-10'>
-					<h2 className='text-2xl font-semibold text-blue-300 mb-4'>
-						Screenshots
-					</h2>
+			<div className='flex gap-4 mb-8'>
+				{project.live && (
+					<a
+						href={project.live}
+						target='_blank'
+						rel='noopener noreferrer'
+						className='text-blue-400 underline'>
+						Live Site
+					</a>
+				)}
 
+				{project.projectType === 'engineering' && project.github && (
+					<a
+						href={project.github}
+						target='_blank'
+						rel='noopener noreferrer'
+						className='text-blue-400 underline'>
+						GitHub Repo
+					</a>
+				)}
+			</div>
+
+			{project.screenshots?.length > 0 && (
+				<div className='mt-10'>
+					<h3 className='font-semibold mb-4'>Screenshots</h3>
 					<LightboxGallery
 						images={project.screenshots}
 						title={project.title}
 					/>
 				</div>
 			)}
-
-			{/* Live site */}
-			{project.liveLink && (
-				<div>
-					<Link
-						href={project.liveLink}
-						target='_blank'
-						className='inline-block mt-4 text-blue-400 hover:underline text-lg'>
-						Visit Live Site ↗
-					</Link>
-				</div>
-			)}
+			<div className='flex gap-4 mt-8'>
+				<BackButton />
+			</div>
 		</section>
 	)
 }

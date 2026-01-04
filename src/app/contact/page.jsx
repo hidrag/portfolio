@@ -1,5 +1,7 @@
 export const metadata = {
 	title: 'Contact | Abhishek Roy',
+	description:
+		'Get in touch with Abhishek Roy for backend, WordPress, WooCommerce, and full-stack development opportunities.',
 }
 
 export default function ContactPage() {
@@ -8,14 +10,13 @@ export default function ContactPage() {
 			<h1 className='text-4xl font-bold text-blue-400 mb-8'>Contact</h1>
 
 			<p className='text-gray-300 mb-8 leading-relaxed'>
-				For collaboration, project inquiries, or opportunities, feel
-				free to reach out. I usually reply within 12 hours.
+				If you’d like to discuss a project, collaboration, or
+				opportunity, feel free to reach out through any of the channels
+				below. I typically respond within 12 hours.
 			</p>
 
 			<div className='space-y-6'>
-				<ContactRow
-					label='Email'
-					value='abhishek.mumbai@gmail.com'>
+				<ContactRow label='Email'>
 					<a
 						href='mailto:abhishek.mumbai@gmail.com'
 						className='text-blue-400 hover:underline'>
@@ -23,10 +24,11 @@ export default function ContactPage() {
 					</a>
 				</ContactRow>
 
-				<ContactRow label='Github'>
+				<ContactRow label='GitHub'>
 					<a
 						href='https://github.com/hidrag'
 						target='_blank'
+						rel='noopener noreferrer'
 						className='text-blue-400 hover:underline'>
 						github.com/hidrag
 					</a>
@@ -36,8 +38,18 @@ export default function ContactPage() {
 					<a
 						href='https://www.linkedin.com/in/abhishekry/'
 						target='_blank'
+						rel='noopener noreferrer'
 						className='text-blue-400 hover:underline'>
-						https://www.linkedin.com/in/abhishekry/
+						linkedin.com/in/abhishekry
+					</a>
+				</ContactRow>
+
+				{/* Optional but recommended */}
+				<ContactRow label='Phone'>
+					<a
+						href='tel:+919748749254'
+						className='text-blue-400 hover:underline'>
+						+919748749254
 					</a>
 				</ContactRow>
 			</div>
@@ -51,7 +63,7 @@ function ContactRow({ label, children }) {
 			<span className='block text-blue-300 font-semibold text-sm mb-1'>
 				{label}
 			</span>
-			<div className='text-gray-200'>{children}</div>
+			<div className='text-gray-200 break-words'>{children}</div>
 		</div>
 	)
 }

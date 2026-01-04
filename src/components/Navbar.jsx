@@ -1,5 +1,5 @@
 'use client'
-
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -22,8 +22,16 @@ export default function Navbar() {
 				{/* Logo */}
 				<Link
 					href='/'
-					className='text-xl font-bold text-blue-400'>
-					AR<span className='text-gray-300'>.</span>
+					className='flex items-center gap-2'>
+					<Image
+						src='/logo.png'
+						alt='Abhishek Roy Logo'
+						width={64}
+						height={64}
+					/>
+					{/* <span className='font-semibold text-blue-400'>
+						Abhishek Roy
+					</span> */}
 				</Link>
 
 				{/* Mobile Hamburger */}

@@ -2,17 +2,29 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
+function slugify(text) {
+	return text
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/(^-|-$)/g, '')
+}
+
 export default function ProjectCard({ project }) {
+	const slug = slugify(project.title)
+
 	return (
 		<div className='bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow'>
-			<div className='relative h-48 w-full'>
-				<Image
-					src={project.image}
-					alt={project.title}
-					fill
-					className='object-cover'
-				/>
-			</div>
+			{/* Featured Image */}
+			{project.image && (
+				<div className='relative h-48 w-full'>
+					<Image
+						src={project.image}
+						alt={project.title}
+						fill
+						className='object-cover'
+					/>
+				</div>
+			)}
 
 			<div className='p-5'>
 				{/* Title + Year */}
@@ -31,8 +43,8 @@ export default function ProjectCard({ project }) {
 				</p>
 
 				{/* Tech Stack */}
-				<div className='flex flex-wrap gap-2 mb-3'>
-					{project.technologies.map((tech) => (
+				<div className='flex flex-wrap gap-2 mb-4'>
+					{project.tech.map((tech) => (
 						<span
 							key={tech}
 							className='bg-gray-700 text-gray-200 px-2 py-1 text-xs rounded'>
@@ -42,19 +54,29 @@ export default function ProjectCard({ project }) {
 				</div>
 
 				{/* Buttons */}
-				<div className='flex gap-4'>
-					{project.liveLink && (
+				<div className='flex gap-4 text-sm'>
+					{project.live && (
 						<Link
-							href={project.liveLink}
+							href={project.live}
 							target='_blank'
-							className='text-sm text-blue-400 hover:underline'>
+							className='text-blue-400 hover:underline'>
 							Live Site ↗
 						</Link>
 					)}
 
+					{project.projectType === 'engineering' &&
+						project.github && (
+							<Link
+								href={project.github}
+								target='_blank'
+								className='text-blue-400 hover:underline'>
+								GitHub ↗
+							</Link>
+						)}
+
 					<Link
-						href={`/projects/${project.slug}`}
-						className='text-sm text-gray-400 hover:text-blue-300'>
+						href={`/projects/${slug}`}
+						className='text-gray-400 hover:text-blue-300'>
 						Details →
 					</Link>
 				</div>

@@ -1,6 +1,10 @@
 import Link from 'next/link'
+import { fetchProjects } from '@/lib/api'
 
-export default function HomePage() {
+export default async function HomePage() {
+	const projects = await fetchProjects()
+
+	const featuredProjects = projects.filter((p) => p.isFeatured).slice(0, 4)
 	return (
 		<section className='relative'>
 			{/* Background Gradient */}
@@ -16,10 +20,11 @@ export default function HomePage() {
 						</h1>
 
 						<p className='text-gray-300 text-lg md:text-xl leading-relaxed mb-6'>
-							Backend-heavy WordPress & WooCommerce developer with
-							9+ years of experience. Have experience in Shopify
-							as well. Also learning Full-stack JavaScript using
-							React, Express, Node, and MongoDB.
+							Backend-focused WordPress & WooCommerce developer
+							with 9+ years of experience. Strong background in
+							Shopify and eCommerce systems. Currently expanding
+							into full-stack development using React, Express,
+							Node.js, MongoDB, and Python-based automation.
 						</p>
 
 						<div className='mt-8 flex gap-4'>
@@ -75,7 +80,7 @@ export default function HomePage() {
 					/>
 					<SkillCard
 						title='JavaScript Frameworks'
-						text='React (basic), Node (basic), Express (basic), MongoDB (basic).'
+						text='React (working knowledge), Node (basic), Express (basic), MongoDB (basic), Next.js (basic), Full-stack fundamentals'
 					/>
 					<SkillCard
 						title='Architecture & Performance'
@@ -84,87 +89,63 @@ export default function HomePage() {
 				</div>
 
 				{/* FEATURED PROJECTS */}
-				<div className='mb-20 space-y-20 fade-in-up'>
-					<h2 className='text-3xl font-semibold text-blue-300 mb-8'>
+				<div className='mb-20 fade-in-up'>
+					<h2 className='text-3xl font-semibold text-blue-300 mb-10'>
 						Featured Projects
 					</h2>
 
-					{/* FIRST FEATURED PROJECT */}
-					<div className='bg-gray-800 border border-gray-700 rounded-lg p-6 grid md:grid-cols-2 gap-6'>
-						<div>
-							<h3 className='text-2xl text-blue-400 font-semibold mb-3'>
-								The Naked Glass
-							</h3>
+					<div className='space-y-20'>
+						{featuredProjects.map((project, index) => (
+							<div
+								key={project._id}
+								className='bg-gray-800 border border-gray-700 rounded-lg p-6 grid md:grid-cols-2 gap-6'>
+								{/* Alternate layout */}
+								{index % 2 === 1 && (
+									<img
+										src={project.image}
+										alt={project.title}
+										className='rounded-lg object-cover shadow-lg border border-gray-700 order-2 md:order-1'
+									/>
+								)}
 
-							<p className='text-gray-300 mb-6'>
-								Developed a Shopify solution for a premium
-								barware brand, including dropshipping
-								integration, product import, and payment gateway
-								integration.
-							</p>
+								<div
+									className={
+										index % 2 === 1
+											? 'order-1 md:order-2'
+											: ''
+									}>
+									<h3 className='text-2xl text-blue-400 font-semibold mb-3'>
+										{project.title}
+									</h3>
 
-							<Link
-								href='/projects/the-naked-glass'
-								className='text-blue-400 hover:underline'>
-								View Case Study →
-							</Link>
-						</div>
+									<p className='text-gray-300 mb-4'>
+										{project.description}
+									</p>
 
-						<img
-							src='/projects/the-naked-glass.png'
-							alt='The Naked Glass Preview'
-							className='rounded-lg object-cover shadow-lg border border-gray-700'
-						/>
+									<p className='text-sm text-gray-400 mb-4'>
+										<strong>Role:</strong> {project.role}
+									</p>
+
+									<Link
+										href={`/projects/${project.title
+											.toLowerCase()
+											.replace(/[^a-z0-9]+/g, '-')
+											.replace(/(^-|-$)/g, '')}`}
+										className='text-blue-400 hover:underline'>
+										View Case Study →
+									</Link>
+								</div>
+
+								{index % 2 === 0 && (
+									<img
+										src={project.image}
+										alt={project.title}
+										className='rounded-lg object-cover shadow-lg border border-gray-700'
+									/>
+								)}
+							</div>
+						))}
 					</div>
-
-					{/* SECOND FEATURED PROJECT */}
-					<div className='bg-gray-800 border border-gray-700 rounded-lg p-6 grid md:grid-cols-2 gap-6'>
-						{/* Right image on larger screens */}
-						<img
-							src='/projects/ogitaste.png'
-							alt='Ogitaste Preview'
-							className='rounded-lg object-cover shadow-lg border border-gray-700 order-2 md:order-1'
-						/>
-
-						<div className='order-1 md:order-2'>
-							<h3 className='text-2xl text-blue-400 font-semibold mb-3'>
-								Ogitaste
-							</h3>
-
-							<p className='text-gray-300 mb-6'>
-								Built a food delivery platform using WooCommerce
-								with custom product details, variable products,
-								checkout customization, payment gateway
-								integration, tipping feature, store pickup, and
-								specific pickup/delivery times.
-							</p>
-
-							<Link
-								href='/projects/ogitaste'
-								className='text-blue-400 hover:underline'>
-								View Case Study →
-							</Link>
-						</div>
-					</div>
-				</div>
-
-				{/* QUICK LINKS */}
-				<div className='flex gap-6 text-blue-400 fade-in-up'>
-					<Link
-						href='/about'
-						className='hover:underline'>
-						About
-					</Link>
-					<Link
-						href='/skills'
-						className='hover:underline'>
-						Skills
-					</Link>
-					<Link
-						href='/contact'
-						className='hover:underline'>
-						Contact
-					</Link>
 				</div>
 			</div>
 		</section>
